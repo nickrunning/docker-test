@@ -1,0 +1,19 @@
+---
+services:
+  wechat-selkies:
+    build:
+      context: .
+    image: wechat-selkies:latest
+    container_name: wechat-selkies
+    volumes:
+      - ./config:/config
+    devices:
+      - /dev/dri:/dev/dri # optional, for hardware acceleration
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=100
+      # - CUSTOM_USER=<Your Name>   # recommended to set a custom user name
+      # - PASSWORD=<Your Password>  # recommended to set a password for selkies web ui
