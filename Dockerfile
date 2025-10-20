@@ -30,7 +30,14 @@ RUN apt-get update && \
     libfontconfig1 libdbus-1-3 libnss3 libx11-xcb1
 
 # Clean up
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get purge -y --autoremove
+RUN apt-get autoclean && \
+    rm -rf \
+        /config/.cache \
+        /config/.npm \
+        /var/lib/apt/lists/* \
+        /var/tmp/* \
+        /tmp/*
 
 # Install WeChat based on target architecture
 RUN case "$TARGETPLATFORM" in \

@@ -31,7 +31,7 @@
 
 1. **直接使用已构建的镜像进行快速部署**
 ```bash
-docker run -it -p 3001:3001 ghcr.io/nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
 ```
 
 2. **访问微信**
@@ -80,6 +80,8 @@ docker run -it -p 3001:3001 ghcr.io/nickrunning/wechat-selkies:latest
 #### 数据卷挂载
 
 - `./config:/config`: 微信配置和数据持久化目录
+
+> 如果升级后右键菜单缺少 `WeChat` 相关选项，请先清空本地挂载目录下的openbox目录(如`./config/.config/openbox`)。
 
 ## 高级配置
 
@@ -191,3 +193,8 @@ docker-compose logs -f wechat-selkies
 - [微信官方网站](https://weixin.qq.com/)
 - [Selkies WebRTC](https://github.com/selkies-project)
 - [LinuxServer.io](https://github.com/linuxserver)
+- [xiaoheiCat/docker-wechat-sogou-pinyin](https://github.com/xiaoheiCat/docker-wechat-sogou-pinyin)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=nickrunning/wechat-selkies&type=Date)](https://www.star-history.com/#nickrunning/wechat-selkies&Date)

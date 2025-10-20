@@ -31,7 +31,7 @@ This project packages the official WeChat Linux client in a Docker container, en
 
 1. **Direct deployment using pre-built images**
 ```bash
-docker run -it -p 3001:3001 ghcr.io/nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
 ```
 
 2. **Access WeChat**
@@ -80,6 +80,8 @@ Configure the following environment variables in `docker-compose.yml`:
 #### Volume Mounts
 
 - `./config:/config`: WeChat configuration and data persistence directory
+
+> Note: If the right-click menu lacks `WeChat` related options after an upgrade, please clear the `openbox` directory in the local mounted directory (e.g., `./config/.config/openbox`).
 
 ## Advanced Configuration
 
@@ -192,3 +194,8 @@ For more information about GPL-3.0 license, please visit: https://www.gnu.org/li
 - [WeChat Official Website](https://weixin.qq.com/)
 - [Selkies WebRTC](https://github.com/selkies-project)
 - [LinuxServer.io](https://github.com/linuxserver)
+- [xiaoheiCat/docker-wechat-sogou-pinyin](https://github.com/xiaoheiCat/docker-wechat-sogou-pinyin)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=nickrunning/wechat-selkies&type=Date)](https://www.star-history.com/#nickrunning/wechat-selkies&Date)
