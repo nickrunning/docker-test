@@ -8,6 +8,10 @@ Docker-based WeChat Linux client with browser access support using Selkies WebRT
 
 This project packages the official WeChat Linux client in a Docker container, enabling direct WeChat usage in browsers through Selkies technology without local installation. Suitable for server deployment, remote work, and other scenarios.
 
+## Upgrade Notes
+
+> If some features are missing after an upgrade, please clear the `openbox` directory in the local mounted directory (e.g., `./config/.config/openbox`).
+
 ## Features
 
 - 🌐 **Browser Access**: Use WeChat directly through web browsers without local installation
@@ -81,7 +85,7 @@ Configure the following environment variables in `docker-compose.yml`:
 
 - `./config:/config`: WeChat configuration and data persistence directory
 
-> Note: If the right-click menu lacks `WeChat` related options after an upgrade, please clear the `openbox` directory in the local mounted directory (e.g., `./config/.config/openbox`).
+> **Note:** If the right-click menu lacks `WeChat` related options after an upgrade, please clear the `openbox` directory in the local mounted directory (e.g., `./config/.config/openbox`).
 
 ## Advanced Configuration
 

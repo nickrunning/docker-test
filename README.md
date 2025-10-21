@@ -8,6 +8,10 @@
 
 本项目将官方微信 Linux 客户端封装在 Docker 容器中，通过 Selkies 技术实现在浏览器中直接使用微信，无需在本地安装微信客户端。适用于服务器部署、远程办公等场景。
 
+## 升级注意事项
+
+> 如果升级后部分功能缺失，请先清空本地挂载目录下的openbox目录(如`./config/.config/openbox`)。
+
 ## 功能特性
 
 - 🌐 **浏览器访问**：通过 Web 浏览器直接使用微信，无需本地安装
@@ -81,7 +85,7 @@ docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selki
 
 - `./config:/config`: 微信配置和数据持久化目录
 
-> 如果升级后右键菜单缺少 `WeChat` 相关选项，请先清空本地挂载目录下的openbox目录(如`./config/.config/openbox`)。
+> **注意：** 如果升级后右键菜单缺少 `WeChat` 相关选项，请先清空本地挂载目录下的openbox目录(如`./config/.config/openbox`)。
 
 ## 高级配置
 
