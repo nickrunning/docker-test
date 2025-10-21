@@ -22,6 +22,7 @@ This project packages the official WeChat Linux client in a Docker container, en
 - 📁 **File Transfer**: Support file transfer through sidebar panel
 - 🖥️ **AMD64 and ARM64 Architecture Support**: Compatible with mainstream CPU architectures
 - 🔧 **Hardware Acceleration**: Optional GPU hardware acceleration support
+- 🪟 **Window Switcher**: Added a floating window switcher in the top left corner for easy switching to background windows, laying the foundation for adding other features in the future
 
 ## Quick Start
 
