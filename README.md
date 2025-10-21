@@ -62,7 +62,11 @@ docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selki
 
 ### 配置说明
 
-更多自定义配置请参考 [Selkies Base Images from LinuxServer](https://github.com/linuxserver/docker-baseimage-selkies).
+更多自定义配置请参考 [Selkies Base Images from LinuxServer](https://github.com/linuxserver/docker-baseimage-selkies)。
+
+#### Docker Hub 推送配置
+
+本项目支持同时推送到 GitHub Container Registry 和 Docker Hub。如需启用 Docker Hub 推送功能，请参考 [Docker Hub 配置说明](DOCKER_HUB_SETUP.md)。
 
 #### 环境变量配置
 
