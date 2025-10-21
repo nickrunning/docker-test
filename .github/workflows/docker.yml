@@ -50,6 +50,8 @@ jobs:
         images: |
           ghcr.io/${{ github.repository }}
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }},enable=${{ vars.ENABLE_DOCKERHUB == 'true' }}
+        flavor: |
+          latest=false
         tags: |
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
@@ -85,7 +87,7 @@ jobs:
         echo "**Digest:** \`${{ steps.build-image.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
         echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "${{ steps.meta-ghcr.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+        echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         
         if [ "${{ vars.ENABLE_DOCKERHUB }}" == "true" ]; then
@@ -96,7 +98,7 @@ jobs:
           echo "**Digest:** \`${{ steps.build-image.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.meta-dockerhub.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         else
           echo "" >> $GITHUB_STEP_SUMMARY
