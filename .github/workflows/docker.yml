@@ -74,16 +74,31 @@ jobs:
         DOCKERHUB_TAGS: ${{ steps.meta-dockerhub.outputs.tags }}
         GHCR_LABELS: ${{ steps.meta-ghcr.outputs.labels }}
       run: |
-        ALL_TAGS="$GHCR_TAGS"
-        if [[ -n "$DOCKERHUB_TOKEN" && -n "$DOCKERHUB_TAGS" ]]; then
-          ALL_TAGS="$GHCR_TAGS,$DOCKERHUB_TAGS"
+        # 创建一个临时文件来存储所有标签
+        ALL_TAGS_FILE=$(mktemp)
+        
+        # 添加GHCR标签到文件
+        if [[ -n "$GHCR_TAGS" ]]; then
+          echo "$GHCR_TAGS" | tr ',' '\n' >> "$ALL_TAGS_FILE"
         fi
         
+        # 添加DockerHub标签到文件（如果存在）
+        if [[ -n "$DOCKERHUB_TOKEN" && -n "$DOCKERHUB_TAGS" ]]; then
+          echo "$DOCKERHUB_TAGS" | tr ',' '\n' >> "$ALL_TAGS_FILE"
+        fi
+        
+        # 读取所有标签并去重
+        ALL_TAGS=$(sort -u "$ALL_TAGS_FILE" | tr '\n' ',' | sed 's/,$//')
+        
+        # 写入输出，确保格式正确
         echo "tags=$ALL_TAGS" >> $GITHUB_OUTPUT
         echo "labels=$GHCR_LABELS" >> $GITHUB_OUTPUT
         
         echo "🏷️ Tags to be built:"
-        echo "$ALL_TAGS" | tr ',' '\n' | sed 's/^/  - /'
+        cat "$ALL_TAGS_FILE" | sed 's/^/  - /'
+        
+        # 清理临时文件
+        rm "$ALL_TAGS_FILE"
 
     - name: Build and push Docker image
       id: build-image
