@@ -76,21 +76,11 @@ jobs:
       run: |
         ALL_TAGS="$GHCR_TAGS"
         if [[ -n "$DOCKERHUB_TOKEN" && -n "$DOCKERHUB_TAGS" ]]; then
-          ALL_TAGS="${GHCR_TAGS},$DOCKERHUB_TAGS"
+          ALL_TAGS="$GHCR_TAGS,$DOCKERHUB_TAGS"
         fi
         
-        # 使用多行输出格式来避免特殊字符问题
-        {
-          echo "tags<<EOF"
-          echo "$ALL_TAGS"
-          echo "EOF"
-        } >> $GITHUB_OUTPUT
-        
-        {
-          echo "labels<<EOF"
-          echo "$GHCR_LABELS"
-          echo "EOF"
-        } >> $GITHUB_OUTPUT
+        echo "tags=$ALL_TAGS" >> $GITHUB_OUTPUT
+        echo "labels=$GHCR_LABELS" >> $GITHUB_OUTPUT
         
         echo "🏷️ Tags to be built:"
         echo "$ALL_TAGS" | tr ',' '\n' | sed 's/^/  - /'
