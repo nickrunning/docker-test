@@ -45,15 +45,65 @@ jobs:
           type=semver,pattern={{major}}
           type=raw,value=latest
 
-    - name: Build and push Docker image
+    # Optional Docker Hub setup (only runs if both secrets are provided)
+    - name: Set Docker Hub image name
+      if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN }}
+      id: dh-image
+      run: |
+        REPO_NAME=${GITHUB_REPOSITORY##*/}
+        echo "image=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME" >> $GITHUB_OUTPUT
+
+    - name: Login to Docker Hub
+      if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN }}
+      uses: docker/login-action@v3
+      with:
+        registry: docker.io
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Extract Docker Hub metadata
+      if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN }}
+      id: dh-meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ steps.dh-image.outputs.image }}
+        tags: |
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=raw,value=latest
+        # labels 可以沿用默认生成，也会被后面合并
+
+    - name: Combine tags (GHCR + optional Docker Hub)
+      id: combined-meta
+      run: |
+        echo "Combining image tags..."
+        echo "tags<<EOF" >> $GITHUB_OUTPUT
+        # GHCR tags
+        echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_OUTPUT
+        # Optional Docker Hub tags
+        if [ -n "${{ secrets.DOCKERHUB_USERNAME }}" ] && [ -n "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
+          echo "${{ steps.dh-meta.outputs.tags }}" >> $GITHUB_OUTPUT
+        fi
+        echo "EOF" >> $GITHUB_OUTPUT
+
+        # 合并 labels （仅简单拼接，若重复由 buildx 处理）
+        echo "labels<<EOF" >> $GITHUB_OUTPUT
+        echo "${{ steps.meta.outputs.labels }}" >> $GITHUB_OUTPUT
+        if [ -n "${{ secrets.DOCKERHUB_USERNAME }}" ] && [ -n "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
+          echo "${{ steps.dh-meta.outputs.labels }}" >> $GITHUB_OUTPUT
+        fi
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Build and push images (GHCR + optional Docker Hub)
       id: build-image
       uses: docker/build-push-action@v5
       with:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ steps.combined-meta.outputs.tags }}
+        labels: ${{ steps.combined-meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -75,3 +125,14 @@ jobs:
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        if [ -n "${{ secrets.DOCKERHUB_USERNAME }}" ] && [ -n "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Docker Hub (optional)" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** ${{ steps.dh-image.outputs.image }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.dh-meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "(Skipped Docker Hub push - secrets not set)" >> $GITHUB_STEP_SUMMARY
+        fi
