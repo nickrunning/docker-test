@@ -35,8 +35,13 @@ This project packages the official WeChat Linux client in a Docker container, en
 ### Quick Deployment
 
 1. **Direct deployment using pre-built images**
+GitHub Container Registry image:
 ```bash
 docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
+```
+Docker Hub image:
+```bash
+docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:latest
 ```
 
 2. **Access WeChat**

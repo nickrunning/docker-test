@@ -35,8 +35,13 @@
 ### 快速部署
 
 1. **直接使用已构建的镜像进行快速部署**
+GitHub Container Registry镜像：
 ```bash
 docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
+```
+Docker Hub镜像：
+```bash
+docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:latest
 ```
 
 2. **访问微信**
