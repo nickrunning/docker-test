@@ -64,6 +64,16 @@ docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selki
 
 For more custom configurations, please refer to [Selkies Base Images from LinuxServer](https://github.com/linuxserver/docker-baseimage-selkies).
 
+#### Docker Hub Push Configuration
+This project supports pushing to both GitHub Container Registry and Docker Hub. Docker Hub push is optional and requires manual configuration. Please add the following Environment Secrets and Environment Variables in your repository to enable Docker Hub push functionality:
+
+**Required Environment Secrets:**
+* `DOCKERHUB_USERNAME`: Your Docker Hub username
+* `DOCKERHUB_TOKEN`: Your Docker Hub Access Token
+
+**Required Environment Variables:**
+* `ENABLE_DOCKERHUB`: Set to `true` to enable Docker Hub push
+
 #### Environment Variables
 
 Configure the following environment variables in `docker-compose.yml`:
