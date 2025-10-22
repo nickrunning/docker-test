@@ -3,7 +3,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/nickrunning/wechat-selkies?style=flat-square&logo=github&color=yellow)](https://github.com/nickrunning/wechat-selkies/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/nickrunning/wechat-selkies?style=flat-square&logo=github&color=blue)](https://github.com/nickrunning/wechat-selkies/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/nickrunning/wechat-selkies?style=flat-square&logo=github&color=red)](https://github.com/nickrunning/wechat-selkies/issues)
-[![GitHub License](https://img.shields.io/github/license/nickrunning/wechat-selkies?style=flat-square&logo=gnu&color=green)](https://github.com/nickrunning/wechat-selkies/blob/master/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/nickrunning/wechat-selkies?style=flat-square&color=green)](https://github.com/nickrunning/wechat-selkies/blob/master/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=blue)](https://hub.docker.com/r/nickrunning/wechat-selkies)
 [![Docker Image Size](https://img.shields.io/docker/image-size/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=orange)](https://hub.docker.com/r/nickrunning/wechat-selkies)
 [![GitHub Release](https://img.shields.io/github/v/release/nickrunning/wechat-selkies?style=flat-square&logo=github&include_prereleases)](https://github.com/nickrunning/wechat-selkies/releases)
@@ -174,23 +174,14 @@ Issues and Pull Requests are welcome!
 
 ## License
 
-This project is licensed under **GNU General Public License v3.0**. See the [LICENSE](LICENSE) file for details.
+This project is licensed under **MIT License**. See the [LICENSE](LICENSE) file for details.
 
-**Important Note**: This project depends on [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies) (GPL-3.0 license), therefore the entire project must comply with GPL-3.0 copyleft requirements.
+### 📜 License Statement
 
-### 📜 License Compliance Statement
-
-This project strictly follows open source license requirements:
-
-1. **Dependency License**: Uses GPL-3.0 licensed `linuxserver/docker-baseimage-selkies` base image
-2. **Copyleft Effect**: According to GPL-3.0 Section 5, derivative works must adopt the same license
-3. **Source Code Availability**: Complete project source code is publicly available on GitHub: https://github.com/nickrunning/wechat-selkies
-4. **Distribution Requirements**: Any individual or organization distributing this project must:
-   - Maintain GPL-3.0 license
-   - Provide complete source code access
-   - Retain all copyright notices and license notices
-
-For more information about GPL-3.0 license, please visit: https://www.gnu.org/licenses/gpl-3.0.html
+- **Project License**: MIT License - A permissive open source license
+- **Dependency Note**: This project uses [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies) as base image
+- **License Compatibility**: Since this project only uses the base image without modifying its source code, following containerized software licensing practices, it can adopt the MIT license
+- **Open Source**: Complete project source code is publicly available on GitHub: https://github.com/nickrunning/wechat-selkies
 
 ## Disclaimer and Copyright Notice
 

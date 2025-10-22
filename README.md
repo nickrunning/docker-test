@@ -3,7 +3,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/nickrunning/wechat-selkies?style=flat-square&logo=github&color=yellow)](https://github.com/nickrunning/wechat-selkies/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/nickrunning/wechat-selkies?style=flat-square&logo=github&color=blue)](https://github.com/nickrunning/wechat-selkies/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/nickrunning/wechat-selkies?style=flat-square&logo=github&color=red)](https://github.com/nickrunning/wechat-selkies/issues)
-[![GitHub License](https://img.shields.io/github/license/nickrunning/wechat-selkies?style=flat-square&logo=gnu&color=green)](https://github.com/nickrunning/wechat-selkies/blob/master/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/nickrunning/wechat-selkies?style=flat-square&color=green)](https://github.com/nickrunning/wechat-selkies/blob/master/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=blue)](https://hub.docker.com/r/nickrunning/wechat-selkies)
 [![Docker Image Size](https://img.shields.io/docker/image-size/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=orange)](https://hub.docker.com/r/nickrunning/wechat-selkies)
 [![GitHub Release](https://img.shields.io/github/v/release/nickrunning/wechat-selkies?style=flat-square&logo=github&include_prereleases)](https://github.com/nickrunning/wechat-selkies/releases)
@@ -173,23 +173,14 @@ docker-compose logs -f wechat-selkies
 
 ## 许可证
 
-本项目采用 **GNU General Public License v3.0** 开源协议。详见 [LICENSE](LICENSE) 文件。
+本项目采用 **MIT License** 开源协议。详见 [LICENSE](LICENSE) 文件。
 
-**重要说明**：本项目依赖 [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies)（GPL-3.0 许可证），因此整个项目需要遵循 GPL-3.0 的传染性要求。
+### 📜 许可证说明
 
-### 📜 许可证合规说明
-
-本项目严格遵循开源许可证要求：
-
-1. **依赖项许可证**: 使用了 GPL-3.0 许可证的 `linuxserver/docker-baseimage-selkies` 基础镜像
-2. **传染性影响**: 根据 GPL-3.0 第5条，衍生作品必须采用相同许可证
-3. **源码提供**: 完整项目源代码已在 GitHub 上公开：https://github.com/nickrunning/wechat-selkies
-4. **分发要求**: 任何分发本项目的个人或组织都必须：
-   - 保持 GPL-3.0 许可证
-   - 提供完整源代码访问
-   - 保留所有版权声明和许可证通知
-
-如需了解更多关于 GPL-3.0 许可证的信息，请访问：https://www.gnu.org/licenses/gpl-3.0.html
+- **项目许可证**: MIT License - 宽松的开源许可证
+- **依赖项说明**: 本项目使用 [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies) 作为基础镜像
+- **许可证兼容性**: 由于本项目仅使用基础镜像而未修改其源码，根据容器化软件的许可证实践，可以采用MIT许可证
+- **源码开放**: 完整项目源代码在 GitHub 上公开：https://github.com/nickrunning/wechat-selkies
 
 ## 免责声明与版权声明
 
