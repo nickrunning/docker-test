@@ -58,7 +58,40 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
    
    Open in browser: `https://localhost:3001` or `https://<server-ip>:3001`
 
-### Custom Deployment (Source Code Deployment)
+### docker-compose Deployment
+1. **Create project directory and navigate into it**
+   ```bash
+   mkdir wechat-selkies
+   cd wechat-selkies
+   ```
+2. **Create `docker-compose.yml` file with the following content**
+   ```yaml
+    services:
+      wechat-selkies:
+        image: nickrunning/wechat-selkies:latest    # or ghcr.io/nickrunning/wechat-selkies:latest
+        container_name: wechat-selkies
+        ports:
+          - "3001:3001"
+        volumes:
+          - ./config:/config
+        devices:
+          - /dev/dri:/dev/dri # optional, for hardware acceleration
+        environment:
+          - PUID=1000                    # user ID
+          - PGID=100                     # group ID
+          - TZ=Asia/Shanghai             # timezone
+          - LC_ALL=zh_CN.UTF-8           # locale
+          - AUTO_START_WECHAT=true       # default is true
+          - AUTO_START_QQ=false          # default is false
+          # - CUSTOM_USER=<Your Name>      # recommended to set a custom user name
+          # - PASSWORD=<Your Password>     # recommended to set a password for selkies web ui
+    ```
+3. **Start the service**
+   ```bash
+   docker-compose up -d
+   ```
+
+### Source Code Deployment
 
 1. **Clone the repository**
    ```bash
@@ -82,11 +115,11 @@ For more custom configurations, please refer to [Selkies Base Images from LinuxS
 #### Docker Hub Push Configuration
 This project supports pushing to both GitHub Container Registry and Docker Hub. Docker Hub push is optional and requires manual configuration. Please add the following Environment Secrets and Environment Variables in your repository to enable Docker Hub push functionality:
 
-**Required Environment Secrets:**
+**Environment Secrets:**
 * `DOCKERHUB_USERNAME`: Your Docker Hub username
 * `DOCKERHUB_TOKEN`: Your Docker Hub Access Token
 
-**Required Environment Variables:**
+**Environment Variables:**
 * `ENABLE_DOCKERHUB`: Set to `true` to enable Docker Hub push
 
 #### Environment Variables
@@ -102,6 +135,8 @@ Configure the following environment variables in `docker-compose.yml`:
 | `LC_ALL` | `zh_CN.UTF-8` | Locale setting |
 | `CUSTOM_USER` | - | Custom username (recommended) |
 | `PASSWORD` | - | Web UI access password (recommended) |
+| `AUTO_START_WECHAT` | `true` | Whether to automatically start the WeChat client |
+| `AUTO_START_QQ` | `false` | Whether to automatically start the QQ client |
 
 #### Port Configuration
 

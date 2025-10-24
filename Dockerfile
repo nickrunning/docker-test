@@ -27,7 +27,7 @@ RUN apt-get update && \
     libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 \
     libxcomposite1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
     libxss1 libxtst6 libatomic1 libxcomposite1 libxrender1 libxrandr2 libxkbcommon-x11-0 \
-    libfontconfig1 libdbus-1-3 libnss3 libx11-xcb1 python3-tk
+    libfontconfig1 libdbus-1-3 libnss3 libx11-xcb1 python3-tk stalonetray
 
 RUN pip install --no-cache-dir python-xlib
 
@@ -51,6 +51,26 @@ RUN case "$TARGETPLATFORM" in \
     rm -f wechat.deb && \
     echo "✅ WeChat installation completed for $WECHAT_ARCH"
 
+# Install QQ based on target architecture
+RUN case "$TARGETPLATFORM" in \
+    "linux/amd64") \
+        QQ_URL="https://dldir1v6.qq.com/qqfile/qq/QQNT/Linux/QQ_3.2.19_250904_amd64_01.deb"; \
+        QQ_ARCH="x86_64" ;; \
+    "linux/arm64") \
+        QQ_URL="https://dldir1v6.qq.com/qqfile/qq/QQNT/Linux/QQ_3.2.19_250904_arm64_01.deb"; \
+        QQ_ARCH="arm64" ;; \
+    *) \
+        echo "❌ Unsupported platform: $TARGETPLATFORM" >&2; \
+        echo "Supported platforms: linux/amd64, linux/arm64" >&2; \
+        exit 1 ;; \
+    esac && \
+    echo "📦 Downloading QQ for $QQ_ARCH architecture..." && \
+    curl -fsSL -o qq.deb "$QQ_URL" && \
+    echo "🔧 Installing QQ..." && \
+    (dpkg -i qq.deb || (apt-get update && apt-get install -f -y && dpkg -i qq.deb)) && \
+    rm -f qq.deb && \
+    echo "✅ QQ installation completed for $QQ_ARCH"
+
 # Clean up
 RUN apt-get purge -y --autoremove
 RUN apt-get autoclean && \
@@ -61,13 +81,18 @@ RUN apt-get autoclean && \
         /var/tmp/* \
         /tmp/*
 
+# configure openbox dock mode for stalonetray
+RUN sed -i '/<dock>/,/<\/dock>/s/<noStrut>no<\/noStrut>/<noStrut>yes<\/noStrut>/' /etc/xdg/openbox/rc.xml
+
 # set app name
 ENV TITLE="WeChat-Selkies"
 ENV TZ="Asia/Shanghai"
 ENV LC_ALL="zh_CN.UTF-8"
+ENV AUTO_START_WECHAT="true"
+ENV AUTO_START_QQ="false"
 
 # update favicon
-COPY /root/wechat.png /usr/share/selkies/www/icon.png
+RUN cp /usr/share/icons/hicolor/128x128/apps/wechat.png /usr/share/selkies/www/icon.png
 
 # add local files
 COPY /root /

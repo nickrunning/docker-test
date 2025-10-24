@@ -45,10 +45,12 @@
 ### 快速部署
 
 1. **直接使用已构建的镜像进行快速部署**
+
 GitHub Container Registry镜像：
 ```bash
 docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
 ```
+
 Docker Hub镜像：
 ```bash
 docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:latest
@@ -58,7 +60,40 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
    
    在浏览器中访问：`https://localhost:3001` 或 `https://<服务器IP>:3001`
 
-### 自定义部署步骤（源码部署）
+### docker-compose 部署
+1. **创建项目目录并进入**
+   ```bash
+   mkdir wechat-selkies
+   cd wechat-selkies
+   ```
+2. **创建 docker-compose.yml 文件**
+   ```yaml
+    services:
+      wechat-selkies:
+        image: nickrunning/wechat-selkies:latest    # or ghcr.io/nickrunning/wechat-selkies:latest
+        container_name: wechat-selkies
+        ports:
+          - "3001:3001"
+        volumes:
+          - ./config:/config
+        devices:
+          - /dev/dri:/dev/dri # optional, for hardware acceleration
+        environment:
+          - PUID=1000                    # user ID
+          - PGID=100                     # group ID
+          - TZ=Asia/Shanghai             # timezone
+          - LC_ALL=zh_CN.UTF-8           # locale
+          - AUTO_START_WECHAT=true       # default is true
+          - AUTO_START_QQ=false          # default is false
+          # - CUSTOM_USER=<Your Name>      # recommended to set a custom user name
+          # - PASSWORD=<Your Password>     # recommended to set a password for selkies web ui
+    ```
+3. **启动服务**
+   ```bash
+   docker-compose up -d
+   ```
+
+### 源码部署
 
 1. **克隆项目**
    ```bash
@@ -83,10 +118,10 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
 
 本项目支持同时推送到 GitHub Container Registry 和 Docker Hub。如需启用 Docker Hub 推送功能，请在仓库下添加Environment Secrets和Environment Variables:
 
-**必需的Environment Secrets:**
+**Environment Secrets:**
 * DOCKERHUB_USERNAME: 你的 Docker Hub 用户名
 * DOCKERHUB_TOKEN: 你的 Docker Hub Access Token
-**必需的Environment Variables:**
+**Environment Variables:**
 * ENABLE_DOCKERHUB: 设置为 `true` 来启用 Docker Hub 推送
 
 #### 环境变量配置
@@ -102,6 +137,8 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
 | `LC_ALL` | `zh_CN.UTF-8` | 语言环境 |
 | `CUSTOM_USER` | - | 自定义用户名（推荐设置） |
 | `PASSWORD` | - | Web UI 访问密码（推荐设置） |
+| `AUTO_START_WECHAT` | `true` | 是否自动启动微信客户端 |
+| `AUTO_START_QQ` | `false` | 是否自动启动 QQ 客户端 |
 
 #### 端口配置
 
