@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: DOCKERHUB
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
       attestations: write
@@ -105,3 +105,39 @@ jobs:
           echo "### Docker Hub" >> $GITHUB_STEP_SUMMARY
           echo "⚠️ **Skipped** - Docker Hub push disabled (set ENABLE_DOCKERHUB=true to enable)" >> $GITHUB_STEP_SUMMARY
         fi
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        generate_release_notes: true
+        make_latest: true
+        body: |
+          ## 🐳 Docker Images
+          
+          **GitHub Container Registry:**
+          ```bash
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          ```
+          
+          **Docker Hub** (if enabled):
+          ```bash
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.version }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          ```
+          
+          ## 🚀 Quick Start
+          **GitHub Container Registry:**
+          ```bash
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          ```
+          
+          **Docker Hub** (if enabled):
+          ```bash
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.version }}
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          ```
+          
+          Then visit: https://localhost:3001
