@@ -117,25 +117,27 @@ jobs:
           
           **GitHub Container Registry:**
           ```bash
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           ```
           
           **Docker Hub** (if enabled):
           ```bash
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.version }}
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
           ```
           
           ## 🚀 Quick Start
           **GitHub Container Registry:**
           ```bash
-          docker run -it -p 3001:3001 -v ./config:/config ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           ```
           
           **Docker Hub** (if enabled):
           ```bash
-          docker run -it -p 3001:3001 -v ./config:/config ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.version }}
+          docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
           ```
           
           Then visit: https://localhost:3001

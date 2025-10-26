@@ -35,6 +35,10 @@
 - 🪟 **窗口切换器**：左上角增加切换悬浮窗，方便切换到后台窗口，为后续添加其它功能做基础
 - 🤖 **自动启动**：可配置自动启动微信和QQ客户端（可选）
 
+## 截图展示
+![微信截图](./docs/images/wechat-selkies-1.jpg)
+![QQ截图](./docs/images/wechat-selkies-2.jpg)
+
 ## 快速开始
 
 ### 环境要求
@@ -49,17 +53,18 @@
 
 GitHub Container Registry镜像：
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ghcr.io/nickrunning/wechat-selkies:latest
 ```
 
 Docker Hub镜像：
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri nickrunning/wechat-selkies:latest
 ```
 
 2. **访问微信**
    
    在浏览器中访问：`https://localhost:3001` 或 `https://<服务器IP>:3001`
+   > **注意：** 映射3000端口用于HTTP访问，3001端口用于HTTPS访问，建议使用HTTPS。
 
 ### docker-compose 部署
 1. **创建项目目录并进入**
@@ -74,7 +79,9 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
         image: nickrunning/wechat-selkies:latest    # or ghcr.io/nickrunning/wechat-selkies:latest
         container_name: wechat-selkies
         ports:
-          - "3001:3001"
+          - "3000:3000"       # http port
+          - "3001:3001"       # https port
+        restart: unless-stopped
         volumes:
           - ./config:/config
         devices:

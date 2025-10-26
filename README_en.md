@@ -34,6 +34,10 @@ This project packages the official WeChat/QQ Linux client in a Docker container,
 - 🔧 **Hardware Acceleration**: Optional GPU hardware acceleration support
 - 🪟 **Window Switcher**: Added a floating window switcher in the top left corner for easy switching to background windows, laying the foundation for adding other features in the future
 
+## Screenshots
+![WeChat Screenshot](./docs/images/wechat-selkies-1.jpg)
+![QQ Screenshot](./docs/images/wechat-selkies-2.jpg)
+
 ## Quick Start
 
 ### Requirements
@@ -47,16 +51,17 @@ This project packages the official WeChat/QQ Linux client in a Docker container,
 1. **Direct deployment using pre-built images**
 GitHub Container Registry image:
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ghcr.io/nickrunning/wechat-selkies:latest
 ```
 Docker Hub image:
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri nickrunning/wechat-selkies:latest
 ```
 
 2. **Access WeChat**
    
    Open in browser: `https://localhost:3001` or `https://<server-ip>:3001`
+   > **Note**: 3001 port is for HTTPS access. If you need HTTP access, please map port 3000 as well.
 
 ### docker-compose Deployment
 1. **Create project directory and navigate into it**
@@ -71,7 +76,9 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
         image: nickrunning/wechat-selkies:latest    # or ghcr.io/nickrunning/wechat-selkies:latest
         container_name: wechat-selkies
         ports:
-          - "3001:3001"
+          - "3000:3000"       # http port
+          - "3001:3001"       # https port
+        restart: unless-stopped
         volumes:
           - ./config:/config
         devices:
