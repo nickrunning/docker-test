@@ -1,0 +1,89 @@
+name: 📝 General Issue
+description: 其他类型的问题或讨论
+title: "[General]: "
+labels: ["question", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        如果您的问题不符合Bug报告或功能请求的类别，请使用此模板。
+        
+        > **提示**: 对于一般性讨论，考虑使用[讨论区](https://github.com/nickrunning/wechat-selkies/discussions)。
+  
+  - type: input
+    id: title
+    attributes:
+      label: 问题标题
+      description: 简洁明了地描述您的问题（最少10个字符）
+      placeholder: 例如：关于项目配置的问题
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: 问题类型
+      description: 请选择最符合您问题的类型
+      options:
+        - 使用问题/疑问
+        - 配置相关
+        - 安装/部署问题
+        - 文档问题
+        - 兼容性问题
+        - 建议/反馈
+        - 其他
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: 详细描述
+      description: 详细描述您的问题或情况（最少30个字符）
+      placeholder: 请详细描述您遇到的情况、需要的帮助或想要讨论的内容...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: context
+    attributes:
+      label: 相关背景
+      description: 提供相关的背景信息或上下文
+      placeholder: |
+        - 您在尝试做什么？
+        - 您的使用场景是什么？
+        - 是否有相关的配置或设置？
+    validations:
+      required: true
+  
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境信息
+      description: 如果相关，请提供环境信息
+      placeholder: |
+        - 操作系统：
+        - Docker版本：
+        - 浏览器：
+        - 其他相关信息：
+  
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 附加信息
+      description: 任何其他可能相关的信息、链接或截图
+      placeholder: 包括日志、配置文件、截图等...
+  
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 检查清单
+      description: 请确认以下事项
+      options:
+        - label: 我已经搜索了现有的issues和讨论
+          required: true
+        - label: 我已经阅读了相关文档
+          required: true
+        - label: 我提供的信息足够详细
+          required: true

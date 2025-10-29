@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 项目文档
+    url: https://github.com/nickrunning/wechat-selkies/blob/master/README.md
+    about: 请先查看项目文档和常见问题
+  - name: 💬 讨论区
+    url: https://github.com/nickrunning/wechat-selkies/discussions
+    about: 如果您有一般性问题或想法，请使用讨论区
+  - name: 🔍 现有Issues
+    url: https://github.com/nickrunning/wechat-selkies/issues
+    about: 搜索现有问题，避免重复提交

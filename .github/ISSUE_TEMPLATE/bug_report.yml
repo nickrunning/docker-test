@@ -1,0 +1,145 @@
+name: 🐛 Bug Report
+description: 创建一个错误报告来帮助我们改进项目
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您花时间填写错误报告！请提供详细信息以帮助我们诊断问题。
+        
+        > **注意**: 请确保标题和描述足够详细，以便我们能够理解和重现问题。
+  
+  - type: input
+    id: title
+    attributes:
+      label: 问题标题
+      description: 简洁明了地描述问题（最少10个字符）
+      placeholder: 例如：微信无法启动或显示黑屏
+    validations:
+      required: true
+  
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: 错误描述
+      description: 清晰简洁地描述遇到的错误（最少30个字符）
+      placeholder: 详细描述您遇到的问题...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: 重现步骤
+      description: 详细说明重现该错误的步骤（最少50个字符）
+      placeholder: |
+        1. 执行 '...'
+        2. 点击 '...'
+        3. 滚动到 '...'
+        4. 看到错误
+      value: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+  
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: 预期行为
+      description: 清楚简洁地描述您期望发生的情况
+      placeholder: 描述应该发生什么...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图
+      description: 如果适用，请添加截图来帮助解释问题
+      placeholder: 拖放图片或粘贴图片链接
+  
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      description: 您使用的操作系统
+      options:
+        - Ubuntu 20.04
+        - Ubuntu 22.04
+        - Ubuntu 24.04
+        - Debian 11
+        - Debian 12
+        - CentOS 7
+        - CentOS 8
+        - Rocky Linux 8
+        - Rocky Linux 9
+        - Windows 10
+        - Windows 11
+        - macOS
+        - 其他（请在附加信息中说明）
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: browser
+    attributes:
+      label: 浏览器
+      description: 您使用的浏览器
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - 其他（请在附加信息中说明）
+    validations:
+      required: true
+  
+  - type: input
+    id: docker-version
+    attributes:
+      label: Docker版本
+      description: 运行 `docker --version` 的输出
+      placeholder: 例如：Docker version 24.0.6
+    validations:
+      required: true
+  
+  - type: input
+    id: compose-version
+    attributes:
+      label: Docker Compose版本
+      description: 运行 `docker-compose --version` 的输出
+      placeholder: 例如：docker-compose version 2.21.0
+    validations:
+      required: true
+  
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志
+      description: 请提供相关的容器日志或错误信息
+      placeholder: 粘贴 `docker logs <container-name>` 的输出
+      render: shell
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 附加信息
+      description: 添加关于该问题的任何其他相关信息
+      placeholder: 任何可能有助于解决问题的额外信息...
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 检查清单
+      description: 请确认以下事项
+      options:
+        - label: 我已经搜索了现有的issues，确认这不是重复问题
+          required: true
+        - label: 我已经阅读了README和相关文档
+          required: true
+        - label: 我提供的信息足够详细，可以帮助重现问题
+          required: true

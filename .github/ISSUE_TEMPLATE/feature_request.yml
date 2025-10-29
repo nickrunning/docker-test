@@ -1,0 +1,119 @@
+name: 🚀 Feature Request
+description: 为这个项目建议一个新想法或功能
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您提出功能建议！请提供详细信息以帮助我们理解您的需求。
+        
+        > **注意**: 请确保标题和描述足够详细，以便我们能够理解您的功能需求。
+  
+  - type: input
+    id: title
+    attributes:
+      label: 功能标题
+      description: 简洁明了地描述建议的功能（最少10个字符）
+      placeholder: 例如：添加微信多开功能支持
+    validations:
+      required: true
+  
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: 问题描述
+      description: 清楚简洁地描述您遇到的问题或需求（最少30个字符）
+      placeholder: 例如：我希望能够同时运行多个微信实例...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: solution-description
+    attributes:
+      label: 解决方案描述
+      description: 清楚简洁地描述您希望实现的功能（最少50个字符）
+      placeholder: 详细描述您期望的功能如何工作...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: alternatives-considered
+    attributes:
+      label: 考虑的替代方案
+      description: 清楚简洁地描述您考虑过的任何替代解决方案或功能
+      placeholder: 描述您考虑过的其他方法...
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: 功能类型
+      description: 这个功能请求属于哪个类别？
+      options:
+        - 用户界面改进
+        - 性能优化
+        - 新功能
+        - 配置选项
+        - 文档改进
+        - 安全性增强
+        - 兼容性改进
+        - 其他
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级
+      description: 您认为这个功能的优先级如何？
+      options:
+        - 低 - 很有用，但不紧急
+        - 中 - 对工作流程有帮助
+        - 高 - 重要的功能缺失
+        - 紧急 - 阻塞性问题
+    validations:
+      required: true
+  
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: 使用场景
+      description: 描述这个功能的具体使用场景和用户故事
+      placeholder: |
+        作为用户，我希望能够...
+        这样我就可以...
+        例如：...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: mockups
+    attributes:
+      label: 模拟图或截图
+      description: 如果适用，请添加模拟图、线框图或参考截图
+      placeholder: 拖放图片或粘贴图片链接
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 附加信息
+      description: 添加关于功能请求的任何其他相关信息、链接或参考资料
+      placeholder: 任何可能有助于实现这个功能的额外信息...
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 检查清单
+      description: 请确认以下事项
+      options:
+        - label: 我已经搜索了现有的issues，确认这不是重复的功能请求
+          required: true
+        - label: 我已经阅读了README和相关文档
+          required: true
+        - label: 这个功能请求与项目的目标和范围相符
+          required: true
+        - label: 我提供的描述足够详细，可以帮助理解功能需求
+          required: true
