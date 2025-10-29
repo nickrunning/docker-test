@@ -10,15 +10,8 @@ body:
         如果您的问题不符合Bug报告或功能请求的类别，请使用此模板。
         
         > **提示**: 对于一般性讨论，考虑使用[讨论区](https://github.com/nickrunning/wechat-selkies/discussions)。
-  
-  - type: input
-    id: title
-    attributes:
-      label: 问题标题
-      description: 简洁明了地描述您的问题（最少10个字符）
-      placeholder: 例如：关于项目配置的问题
-    validations:
-      required: true
+        
+        **标题要求**: 请在页面顶部的标题框中填写简洁明了的问题描述（最少10个字符），例如："关于项目配置的问题"
   
   - type: dropdown
     id: issue-type

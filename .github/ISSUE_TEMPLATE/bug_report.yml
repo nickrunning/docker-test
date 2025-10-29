@@ -10,15 +10,8 @@ body:
         感谢您花时间填写错误报告！请提供详细信息以帮助我们诊断问题。
         
         > **注意**: 请确保标题和描述足够详细，以便我们能够理解和重现问题。
-  
-  - type: input
-    id: title
-    attributes:
-      label: 问题标题
-      description: 简洁明了地描述问题（最少10个字符）
-      placeholder: 例如：微信无法启动或显示黑屏
-    validations:
-      required: true
+        
+        **标题要求**: 请在页面顶部的标题框中填写简洁明了的问题描述（最少10个字符），例如："微信无法启动显示黑屏"
   
   - type: textarea
     id: bug-description

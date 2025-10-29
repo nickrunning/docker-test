@@ -20,12 +20,15 @@ jobs:
             console.log(`Issue title: "${title}"`);
             console.log(`Title length: ${title.length}`);
             
-            if (title.length < minTitleLength) {
+            // 去除模板前缀进行长度检查
+            const cleanTitle = title.replace(/^\[(Bug|Feature|General)\]:\s*/i, '').trim();
+            
+            if (cleanTitle.length < minTitleLength) {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issue.number,
-                body: `⚠️ **标题过短**\n\n您的issue标题太短了（当前${title.length}个字符，最少需要${minTitleLength}个字符）。请提供一个更具描述性的标题，以便我们更好地理解问题。\n\n请编辑issue标题，提供更多详细信息。`
+                body: `⚠️ **标题过短**\n\n您的issue标题内容太短了（当前有效内容${cleanTitle.length}个字符，最少需要${minTitleLength}个字符）。请提供一个更具描述性的标题，以便我们更好地理解问题。\n\n**示例：**\n- ✅ "[Bug]: 微信无法启动显示黑屏"\n- ❌ "[Bug]: 有问题"\n\n请编辑issue标题，提供更多详细信息。`
               });
               
               await github.rest.issues.addLabels({
