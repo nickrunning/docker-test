@@ -1,12 +1,22 @@
 # WeChat Selkies
 
+[![GitHub Stars](https://img.shields.io/github/stars/nickrunning/wechat-selkies?style=flat-square&logo=github&color=yellow)](https://github.com/nickrunning/wechat-selkies/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/nickrunning/wechat-selkies?style=flat-square&logo=github&color=blue)](https://github.com/nickrunning/wechat-selkies/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/nickrunning/wechat-selkies?style=flat-square&logo=github&color=red)](https://github.com/nickrunning/wechat-selkies/issues)
+[![GitHub License](https://img.shields.io/github/license/nickrunning/wechat-selkies?style=flat-square&color=green)](https://github.com/nickrunning/wechat-selkies/blob/master/LICENSE)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=blue)](https://hub.docker.com/r/nickrunning/wechat-selkies)
+[![Docker Image Size](https://img.shields.io/docker/image-size/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=orange)](https://hub.docker.com/r/nickrunning/wechat-selkies)
+[![GitHub Release](https://img.shields.io/github/v/release/nickrunning/wechat-selkies?style=flat-square&logo=github&include_prereleases)](https://github.com/nickrunning/wechat-selkies/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nickrunning/wechat-selkies/docker.yml?style=flat-square&logo=github-actions&label=build)](https://github.com/nickrunning/wechat-selkies/actions)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/nickrunning/wechat-selkies?style=flat-square&logo=github&color=purple)](https://github.com/nickrunning/wechat-selkies/commits)
+
 English | [中文](README.md)
 
-Docker-based WeChat Linux client with browser access support using Selkies WebRTC technology.
+Docker-based WeChat/QQ Linux client with browser access support using Selkies WebRTC technology.
 
 ## Project Overview
 
-This project packages the official WeChat Linux client in a Docker container, enabling direct WeChat usage in browsers through Selkies technology without local installation. Suitable for server deployment, remote work, and other scenarios.
+This project packages the official WeChat/QQ Linux client in a Docker container, enabling direct WeChat/QQ usage in browsers through Selkies technology without local installation. Suitable for server deployment, remote work, and other scenarios.
 
 ## Upgrade Notes
 
@@ -24,6 +34,10 @@ This project packages the official WeChat Linux client in a Docker container, en
 - 🔧 **Hardware Acceleration**: Optional GPU hardware acceleration support
 - 🪟 **Window Switcher**: Added a floating window switcher in the top left corner for easy switching to background windows, laying the foundation for adding other features in the future
 
+## Screenshots
+![WeChat Screenshot](./docs/images/wechat-selkies-1.jpg)
+![QQ Screenshot](./docs/images/wechat-selkies-2.jpg)
+
 ## Quick Start
 
 ### Requirements
@@ -37,18 +51,54 @@ This project packages the official WeChat Linux client in a Docker container, en
 1. **Direct deployment using pre-built images**
 GitHub Container Registry image:
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ghcr.io/nickrunning/wechat-selkies:latest
 ```
 Docker Hub image:
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri nickrunning/wechat-selkies:latest
 ```
 
 2. **Access WeChat**
    
    Open in browser: `https://localhost:3001` or `https://<server-ip>:3001`
+   > **Note**: 3001 port is for HTTPS access. If you need HTTP access, please map port 3000 as well.
 
-### Custom Deployment (Source Code Deployment)
+### docker-compose Deployment
+1. **Create project directory and navigate into it**
+   ```bash
+   mkdir wechat-selkies
+   cd wechat-selkies
+   ```
+2. **Create `docker-compose.yml` file with the following content**
+   ```yaml
+    services:
+      wechat-selkies:
+        image: nickrunning/wechat-selkies:latest    # or ghcr.io/nickrunning/wechat-selkies:latest
+        container_name: wechat-selkies
+        ports:
+          - "3000:3000"       # http port
+          - "3001:3001"       # https port
+        restart: unless-stopped
+        volumes:
+          - ./config:/config
+        devices:
+          - /dev/dri:/dev/dri # optional, for hardware acceleration
+        environment:
+          - PUID=1000                    # user ID
+          - PGID=100                     # group ID
+          - TZ=Asia/Shanghai             # timezone
+          - LC_ALL=zh_CN.UTF-8           # locale
+          - AUTO_START_WECHAT=true       # default is true
+          - AUTO_START_QQ=false          # default is false
+          # - CUSTOM_USER=<Your Name>      # recommended to set a custom user name
+          # - PASSWORD=<Your Password>     # recommended to set a password for selkies web ui
+    ```
+3. **Start the service**
+   ```bash
+   docker-compose up -d
+   ```
+
+### Source Code Deployment
 
 1. **Clone the repository**
    ```bash
@@ -72,11 +122,11 @@ For more custom configurations, please refer to [Selkies Base Images from LinuxS
 #### Docker Hub Push Configuration
 This project supports pushing to both GitHub Container Registry and Docker Hub. Docker Hub push is optional and requires manual configuration. Please add the following Environment Secrets and Environment Variables in your repository to enable Docker Hub push functionality:
 
-**Required Environment Secrets:**
+**Environment Secrets:**
 * `DOCKERHUB_USERNAME`: Your Docker Hub username
 * `DOCKERHUB_TOKEN`: Your Docker Hub Access Token
 
-**Required Environment Variables:**
+**Environment Variables:**
 * `ENABLE_DOCKERHUB`: Set to `true` to enable Docker Hub push
 
 #### Environment Variables
@@ -92,6 +142,8 @@ Configure the following environment variables in `docker-compose.yml`:
 | `LC_ALL` | `zh_CN.UTF-8` | Locale setting |
 | `CUSTOM_USER` | - | Custom username (recommended) |
 | `PASSWORD` | - | Web UI access password (recommended) |
+| `AUTO_START_WECHAT` | `true` | Whether to automatically start the WeChat client |
+| `AUTO_START_QQ` | `false` | Whether to automatically start the QQ client |
 
 #### Port Configuration
 
@@ -164,23 +216,14 @@ Issues and Pull Requests are welcome!
 
 ## License
 
-This project is licensed under **GNU General Public License v3.0**. See the [LICENSE](LICENSE) file for details.
+This project is licensed under **MIT License**. See the [LICENSE](LICENSE) file for details.
 
-**Important Note**: This project depends on [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies) (GPL-3.0 license), therefore the entire project must comply with GPL-3.0 copyleft requirements.
+### 📜 License Statement
 
-### 📜 License Compliance Statement
-
-This project strictly follows open source license requirements:
-
-1. **Dependency License**: Uses GPL-3.0 licensed `linuxserver/docker-baseimage-selkies` base image
-2. **Copyleft Effect**: According to GPL-3.0 Section 5, derivative works must adopt the same license
-3. **Source Code Availability**: Complete project source code is publicly available on GitHub: https://github.com/nickrunning/wechat-selkies
-4. **Distribution Requirements**: Any individual or organization distributing this project must:
-   - Maintain GPL-3.0 license
-   - Provide complete source code access
-   - Retain all copyright notices and license notices
-
-For more information about GPL-3.0 license, please visit: https://www.gnu.org/licenses/gpl-3.0.html
+- **Project License**: MIT License - A permissive open source license
+- **Dependency Note**: This project uses [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies) as base image
+- **License Compatibility**: Since this project only uses the base image without modifying its source code, following containerized software licensing practices, it can adopt the MIT license
+- **Open Source**: Complete project source code is publicly available on GitHub: https://github.com/nickrunning/wechat-selkies
 
 ## Disclaimer and Copyright Notice
 

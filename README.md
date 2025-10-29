@@ -1,12 +1,22 @@
 # WeChat Selkies
 
+[![GitHub Stars](https://img.shields.io/github/stars/nickrunning/wechat-selkies?style=flat-square&logo=github&color=yellow)](https://github.com/nickrunning/wechat-selkies/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/nickrunning/wechat-selkies?style=flat-square&logo=github&color=blue)](https://github.com/nickrunning/wechat-selkies/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/nickrunning/wechat-selkies?style=flat-square&logo=github&color=red)](https://github.com/nickrunning/wechat-selkies/issues)
+[![GitHub License](https://img.shields.io/github/license/nickrunning/wechat-selkies?style=flat-square&color=green)](https://github.com/nickrunning/wechat-selkies/blob/master/LICENSE)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=blue)](https://hub.docker.com/r/nickrunning/wechat-selkies)
+[![Docker Image Size](https://img.shields.io/docker/image-size/nickrunning/wechat-selkies?style=flat-square&logo=docker&color=orange)](https://hub.docker.com/r/nickrunning/wechat-selkies)
+[![GitHub Release](https://img.shields.io/github/v/release/nickrunning/wechat-selkies?style=flat-square&logo=github&include_prereleases)](https://github.com/nickrunning/wechat-selkies/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nickrunning/wechat-selkies/docker.yml?style=flat-square&logo=github-actions&label=build)](https://github.com/nickrunning/wechat-selkies/actions)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/nickrunning/wechat-selkies?style=flat-square&logo=github&color=purple)](https://github.com/nickrunning/wechat-selkies/commits)
+
 中文 | [English](README_en.md)
 
-基于 Docker 的微信 Linux 客户端，使用 Selkies WebRTC 技术提供浏览器访问支持。
+基于 Docker 的微信/QQ Linux 客户端，使用 Selkies WebRTC 技术提供浏览器访问支持。
 
 ## 项目简介
 
-本项目将官方微信 Linux 客户端封装在 Docker 容器中，通过 Selkies 技术实现在浏览器中直接使用微信，无需在本地安装微信客户端。适用于服务器部署、远程办公等场景。
+本项目将官方微信/QQ Linux 客户端封装在 Docker 容器中，通过 Selkies 技术实现在浏览器中直接使用微信/QQ，无需在本地安装微信/QQ 客户端。适用于服务器部署、远程办公等场景。
 
 ## 升级注意事项
 
@@ -23,6 +33,11 @@
 - 🖥️ **AMD64和ARM64架构支持**：兼容主流CPU架构
 - 🔧 **硬件加速**：可选的 GPU 硬件加速支持
 - 🪟 **窗口切换器**：左上角增加切换悬浮窗，方便切换到后台窗口，为后续添加其它功能做基础
+- 🤖 **自动启动**：可配置自动启动微信和QQ客户端（可选）
+
+## 截图展示
+![微信截图](./docs/images/wechat-selkies-1.jpg)
+![QQ截图](./docs/images/wechat-selkies-2.jpg)
 
 ## 快速开始
 
@@ -35,20 +50,58 @@
 ### 快速部署
 
 1. **直接使用已构建的镜像进行快速部署**
+
 GitHub Container Registry镜像：
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config ghcr.io/nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri ghcr.io/nickrunning/wechat-selkies:latest
 ```
+
 Docker Hub镜像：
 ```bash
-docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:latest
+docker run -it -p 3001:3001 -v ./config:/config --device /dev/dri:/dev/dri nickrunning/wechat-selkies:latest
 ```
 
 2. **访问微信**
    
    在浏览器中访问：`https://localhost:3001` 或 `https://<服务器IP>:3001`
+   > **注意：** 映射3000端口用于HTTP访问，3001端口用于HTTPS访问，建议使用HTTPS。
 
-### 自定义部署步骤（源码部署）
+### docker-compose 部署
+1. **创建项目目录并进入**
+   ```bash
+   mkdir wechat-selkies
+   cd wechat-selkies
+   ```
+2. **创建 docker-compose.yml 文件**
+   ```yaml
+    services:
+      wechat-selkies:
+        image: nickrunning/wechat-selkies:latest    # or ghcr.io/nickrunning/wechat-selkies:latest
+        container_name: wechat-selkies
+        ports:
+          - "3000:3000"       # http port
+          - "3001:3001"       # https port
+        restart: unless-stopped
+        volumes:
+          - ./config:/config
+        devices:
+          - /dev/dri:/dev/dri # optional, for hardware acceleration
+        environment:
+          - PUID=1000                    # user ID
+          - PGID=100                     # group ID
+          - TZ=Asia/Shanghai             # timezone
+          - LC_ALL=zh_CN.UTF-8           # locale
+          - AUTO_START_WECHAT=true       # default is true
+          - AUTO_START_QQ=false          # default is false
+          # - CUSTOM_USER=<Your Name>      # recommended to set a custom user name
+          # - PASSWORD=<Your Password>     # recommended to set a password for selkies web ui
+    ```
+3. **启动服务**
+   ```bash
+   docker-compose up -d
+   ```
+
+### 源码部署
 
 1. **克隆项目**
    ```bash
@@ -73,10 +126,10 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
 
 本项目支持同时推送到 GitHub Container Registry 和 Docker Hub。如需启用 Docker Hub 推送功能，请在仓库下添加Environment Secrets和Environment Variables:
 
-**必需的Environment Secrets:**
+**Environment Secrets:**
 * DOCKERHUB_USERNAME: 你的 Docker Hub 用户名
 * DOCKERHUB_TOKEN: 你的 Docker Hub Access Token
-**必需的Environment Variables:**
+**Environment Variables:**
 * ENABLE_DOCKERHUB: 设置为 `true` 来启用 Docker Hub 推送
 
 #### 环境变量配置
@@ -92,6 +145,8 @@ docker run -it -p 3001:3001 -v ./config:/config nickrunning/wechat-selkies:lates
 | `LC_ALL` | `zh_CN.UTF-8` | 语言环境 |
 | `CUSTOM_USER` | - | 自定义用户名（推荐设置） |
 | `PASSWORD` | - | Web UI 访问密码（推荐设置） |
+| `AUTO_START_WECHAT` | `true` | 是否自动启动微信客户端 |
+| `AUTO_START_QQ` | `false` | 是否自动启动 QQ 客户端 |
 
 #### 端口配置
 
@@ -163,23 +218,14 @@ docker-compose logs -f wechat-selkies
 
 ## 许可证
 
-本项目采用 **GNU General Public License v3.0** 开源协议。详见 [LICENSE](LICENSE) 文件。
+本项目采用 **MIT License** 开源协议。详见 [LICENSE](LICENSE) 文件。
 
-**重要说明**：本项目依赖 [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies)（GPL-3.0 许可证），因此整个项目需要遵循 GPL-3.0 的传染性要求。
+### 📜 许可证说明
 
-### 📜 许可证合规说明
-
-本项目严格遵循开源许可证要求：
-
-1. **依赖项许可证**: 使用了 GPL-3.0 许可证的 `linuxserver/docker-baseimage-selkies` 基础镜像
-2. **传染性影响**: 根据 GPL-3.0 第5条，衍生作品必须采用相同许可证
-3. **源码提供**: 完整项目源代码已在 GitHub 上公开：https://github.com/nickrunning/wechat-selkies
-4. **分发要求**: 任何分发本项目的个人或组织都必须：
-   - 保持 GPL-3.0 许可证
-   - 提供完整源代码访问
-   - 保留所有版权声明和许可证通知
-
-如需了解更多关于 GPL-3.0 许可证的信息，请访问：https://www.gnu.org/licenses/gpl-3.0.html
+- **项目许可证**: MIT License - 宽松的开源许可证
+- **依赖项说明**: 本项目使用 [LinuxServer.io baseimage-selkies](https://github.com/linuxserver/docker-baseimage-selkies) 作为基础镜像
+- **许可证兼容性**: 由于本项目仅使用基础镜像而未修改其源码，根据容器化软件的许可证实践，可以采用MIT许可证
+- **源码开放**: 完整项目源代码在 GitHub 上公开：https://github.com/nickrunning/wechat-selkies
 
 ## 免责声明与版权声明
 
