@@ -6,8 +6,8 @@ contact_links:
   - name: 💬 讨论区 - 问答交流
     url: https://github.com/nickrunning/wechat-selkies/discussions
     about: 一般性问题、经验分享、想法讨论请使用讨论区
-  - name: � 讨论区指南
-    url: https://github.com/nickrunning/wechat-selkies/blob/master/.github/DISCUSSION_TEMPLATE/GUIDE.md
+  - name: 📋 讨论区使用指南
+    url: https://github.com/nickrunning/wechat-selkies/blob/master/.github/discussions-guide.md
     about: 了解如何高效使用讨论区和最佳实践
   - name: 🔍 搜索现有内容
     url: https://github.com/nickrunning/wechat-selkies/search?type=discussions
