@@ -1,0 +1,206 @@
+name: Discussion Management
+
+on:
+  discussion:
+    types: [created, edited]
+  discussion_comment:
+    types: [created]
+
+jobs:
+  manage-discussions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome First-time Discussion Participants
+        uses: actions/github-script@v6
+        if: github.event.action == 'created' && github.event.discussion
+        with:
+          script: |
+            const discussion = context.payload.discussion;
+            
+            // 检查是否是首次参与讨论的用户
+            const { data: discussions } = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} author:${discussion.user.login} type:discussion`,
+              sort: 'created',
+              order: 'asc'
+            });
+            
+            if (discussions.total_count === 1) {
+              const welcomeMessage = `🎉 **欢迎首次参与讨论！**\n\n感谢 @${discussion.user.login} 在社区中开启讨论！\n\n**讨论区指南：**\n- 💬 这里是开放的交流平台，适合问答、分享和讨论\n- 🔍 可以搜索现有讨论避免重复\n- 🏷️ 使用合适的分类和标签\n- 🤝 保持友善和建设性的交流\n\n**有用资源：**\n- 📚 [讨论区指南](.github/DISCUSSION_TEMPLATE/GUIDE.md)\n- 🐛 确定的Bug请提交 [Issues](../../issues)\n- 📖 项目文档请查看 [README](../../README.md)\n\n我们期待您的积极参与！如果您的问题得到解决，请考虑标记最佳答案。`;
+              
+              await github.rest.discussions.createDiscussionComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                discussion_number: discussion.number,
+                body: welcomeMessage
+              });
+            }
+
+      - name: Check Discussion Quality
+        uses: actions/github-script@v6
+        if: github.event.action == 'created' && github.event.discussion
+        with:
+          script: |
+            const discussion = context.payload.discussion;
+            const title = discussion.title.trim();
+            const body = discussion.body ? discussion.body.trim() : '';
+            
+            console.log(`Discussion title: "${title}" (${title.length} chars)`);
+            console.log(`Discussion body: ${body.length} chars`);
+            
+            const issues = [];
+            
+            // 检查标题长度
+            if (title.length < 10) {
+              issues.push('标题过短（至少需要10个字符）');
+            } else if (title.length > 200) {
+              issues.push('标题过长（建议不超过200个字符）');
+            }
+            
+            // 检查内容长度
+            if (body.length < 30) {
+              issues.push('内容过短（至少需要30个字符以提供足够信息）');
+            }
+            
+            // 检查是否包含常见的无效内容
+            const lowQualityPatterns = [
+              /^test$/i,
+              /^hello$/i,
+              /^hi$/i,
+              /^help$/i,
+              /^问题$/,
+              /^求助$/
+            ];
+            
+            if (lowQualityPatterns.some(pattern => pattern.test(title))) {
+              issues.push('标题过于简单，请提供更具体的描述');
+            }
+            
+            if (issues.length > 0) {
+              const feedbackMessage = `⚠️ **讨论质量建议**\n\n为了获得更好的帮助和讨论效果，建议您改进以下方面：\n\n${issues.map(issue => `- ${issue}`).join('\n')}\n\n**提升讨论质量的建议：**\n- 📝 使用描述性的标题，包含核心关键词\n- 📋 提供详细的背景信息和具体问题\n- 🔍 搜索现有讨论，避免重复\n- 📚 查阅项目文档和FAQ\n\n**如何编辑讨论：**\n点击标题旁边的 ✏️ 图标可以编辑讨论内容。\n\n感谢您的理解和配合！`;
+              
+              await github.rest.discussions.createDiscussionComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                discussion_number: discussion.number,
+                body: feedbackMessage
+              });
+            }
+
+      - name: Auto-categorize Discussions
+        uses: actions/github-script@v6
+        if: github.event.action == 'created' && github.event.discussion
+        with:
+          script: |
+            const discussion = context.payload.discussion;
+            const title = discussion.title.toLowerCase();
+            const body = (discussion.body || '').toLowerCase();
+            const content = title + ' ' + body;
+            
+            // 根据内容自动建议分类
+            const categoryMap = {
+              'Q&A': ['问题', '如何', 'how', 'help', '求助', '不能', '无法', '错误', 'error', '问'],
+              'Ideas': ['建议', '想法', '改进', '功能', 'feature', 'idea', '希望', '可以', '支持'],
+              'Show and tell': ['分享', '展示', '实现', '配置', '成功', 'share', 'show', '效果'],
+              'General': ['讨论', '交流', 'discuss', 'chat', '话题', '社区']
+            };
+            
+            let suggestedCategory = null;
+            let maxMatches = 0;
+            
+            for (const [category, keywords] of Object.entries(categoryMap)) {
+              const matches = keywords.filter(keyword => content.includes(keyword)).length;
+              if (matches > maxMatches) {
+                maxMatches = matches;
+                suggestedCategory = category;
+              }
+            }
+            
+            if (suggestedCategory && maxMatches > 0) {
+              const categoryMessage = `🏷️ **分类建议**\n\n根据您讨论的内容，建议将此讨论归类为 **${suggestedCategory}**。\n\n**各分类说明：**\n- **Q&A** - 技术问题、故障排除、使用咨询\n- **Ideas** - 改进建议、新功能想法、技术讨论\n- **Show and tell** - 成果展示、配置分享、经验案例\n- **General** - 一般性讨论、社区话题、开放交流\n\n如需调整分类，请编辑讨论设置。`;
+              
+              await github.rest.discussions.createDiscussionComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                discussion_number: discussion.number,
+                body: categoryMessage
+              });
+            }
+
+      - name: Encourage Best Practices
+        uses: actions/github-script@v6
+        if: github.event.action == 'created' && github.event.discussion
+        with:
+          script: |
+            const discussion = context.payload.discussion;
+            const body = discussion.body || '';
+            
+            const tips = [];
+            
+            // 检查是否包含环境信息
+            if (!/操作系统|docker|version|环境/.test(body.toLowerCase())) {
+              tips.push('💻 **环境信息** - 提供操作系统、Docker版本等环境信息有助于问题诊断');
+            }
+            
+            // 检查是否包含日志或错误信息
+            if (!/日志|log|错误|error|```/.test(body.toLowerCase())) {
+              tips.push('📋 **日志信息** - 相关的错误日志或配置信息能帮助更快定位问题');
+            }
+            
+            // 检查是否包含尝试过的解决方案
+            if (!/尝试|tried|解决|搜索/.test(body.toLowerCase())) {
+              tips.push('🔍 **已尝试方案** - 说明已经尝试过的解决方法，避免重复建议');
+            }
+            
+            if (tips.length >= 2) {
+              const tipsMessage = `💡 **讨论优化建议**\n\n为了获得更精准的帮助，建议补充以下信息：\n\n${tips.join('\n')}\n\n**其他建议：**\n- 🔍 搜索现有讨论和issues\n- 📚 查看项目文档和FAQ\n- 🖼️ 适当添加截图说明问题\n- ✅ 问题解决后请标记最佳答案\n\n您可以编辑原始讨论来补充这些信息。`;
+              
+              await github.rest.discussions.createDiscussionComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                discussion_number: discussion.number,
+                body: tipsMessage
+              });
+            }
+
+      - name: Monitor Discussion Activity
+        uses: actions/github-script@v6
+        if: github.event.action == 'created' && github.event.discussion_comment
+        with:
+          script: |
+            const comment = context.payload.comment;
+            const discussion = context.payload.discussion;
+            
+            // 感谢活跃参与者
+            const { data: comments } = await github.rest.discussions.listDiscussionComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              discussion_number: discussion.number
+            });
+            
+            const userComments = comments.filter(c => c.user.login === comment.user.login);
+            
+            if (userComments.length === 5) {
+              await github.rest.discussions.createDiscussionComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                discussion_number: discussion.number,
+                body: `🌟 感谢 @${comment.user.login} 在此讨论中的积极参与！您的贡献对社区很有价值。`
+              });
+            }
+            
+            // 检测可能的解决方案
+            const solutionPatterns = [
+              /解决了?|solved?|fixed?|works?/i,
+              /成功了?|successful/i,
+              /谢谢|thank/i,
+              /可以了?|working/i
+            ];
+            
+            if (solutionPatterns.some(pattern => pattern.test(comment.body))) {
+              await github.rest.discussions.createDiscussionComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                discussion_number: discussion.number,
+                body: `🎉 看起来问题可能已经解决！如果确实如此，请考虑：\n\n- ✅ 标记最佳答案（点击有帮助回复旁边的复选框）\n- 📝 简要总结解决方案\n- 🤝 感谢提供帮助的社区成员\n\n这样可以帮助其他遇到类似问题的用户！`
+              });
+            }

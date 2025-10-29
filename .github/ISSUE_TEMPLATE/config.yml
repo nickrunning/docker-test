@@ -2,10 +2,13 @@ blank_issues_enabled: false
 contact_links:
   - name: 📖 项目文档
     url: https://github.com/nickrunning/wechat-selkies/blob/master/README.md
-    about: 请先查看项目文档和常见问题
-  - name: 💬 讨论区
+    about: 请先查看项目文档和常见问题解答
+  - name: 💬 讨论区 - 问答交流
     url: https://github.com/nickrunning/wechat-selkies/discussions
-    about: 如果您有一般性问题或想法，请使用讨论区
-  - name: 🔍 现有Issues
-    url: https://github.com/nickrunning/wechat-selkies/issues
-    about: 搜索现有问题，避免重复提交
+    about: 一般性问题、经验分享、想法讨论请使用讨论区
+  - name: � 讨论区指南
+    url: https://github.com/nickrunning/wechat-selkies/blob/master/.github/DISCUSSION_TEMPLATE/GUIDE.md
+    about: 了解如何高效使用讨论区和最佳实践
+  - name: 🔍 搜索现有内容
+    url: https://github.com/nickrunning/wechat-selkies/search?type=discussions
+    about: 搜索现有的讨论和问题，避免重复提交
