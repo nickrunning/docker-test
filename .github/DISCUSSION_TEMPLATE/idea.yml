@@ -1,0 +1,142 @@
+labels: [idea, enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您分享想法和建议！请详细描述您的构思，帮助我们理解和评估。
+        
+        > 💡 **提示**: 如果是具体的功能请求，请考虑使用 [Feature Request Issue](https://github.com/nickrunning/wechat-selkies/issues/new?template=feature_request.yml)
+  
+  - type: textarea
+    id: idea-summary
+    attributes:
+      label: 💡 想法概述
+      description: 用简洁的语言描述您的想法
+      placeholder: 一句话概括您的想法或建议...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 🎯 动机和背景
+      description: 为什么提出这个想法？要解决什么问题？
+      placeholder: |
+        - 当前存在什么问题或限制？
+        - 这个想法能带来什么价值？
+        - 有什么具体的使用场景？
+    validations:
+      required: true
+  
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: 📋 详细描述
+      description: 详细说明您的想法和期望的实现方式
+      placeholder: |
+        请详细描述：
+        - 具体的功能或改进内容
+        - 期望的用户体验
+        - 可能的实现方式
+        - 相关的技术考虑
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: category
+    attributes:
+      label: 🏷️ 想法类别
+      description: 这个想法属于哪个类别？
+      options:
+        - 用户界面改进
+        - 性能优化
+        - 新功能特性
+        - 配置和设置
+        - 文档改进
+        - 安全性增强
+        - 兼容性改进
+        - 开发和部署
+        - 用户体验优化
+        - 其他
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: ⭐ 优先级评估
+      description: 您认为这个想法的优先级如何？
+      options:
+        - 低 - 很有用，但不紧急
+        - 中 - 会显著改善用户体验
+        - 高 - 重要功能缺失，建议优先实现
+        - 紧急 - 阻塞性问题，急需解决
+    validations:
+      required: true
+  
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: 🎭 使用场景
+      description: 描述具体的使用场景和用户故事
+      placeholder: |
+        请描述具体场景：
+        - 作为用户，我希望能够...
+        - 这样我就可以...
+        - 例如，当我...的时候，我需要...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🔄 替代方案
+      description: 是否考虑过其他解决方案？
+      placeholder: |
+        - 目前有什么临时解决方案？
+        - 考虑过哪些其他实现方式？
+        - 为什么选择这个方案？
+  
+  - type: checkboxes
+    id: feasibility
+    attributes:
+      label: 🔍 可行性分析
+      description: 请帮助评估这个想法的可行性
+      options:
+        - label: 我认为技术上是可行的
+        - label: 我有相关的技术经验或资源
+        - label: 我愿意参与实现或测试
+        - label: 我了解可能的技术挑战
+        - label: 我考虑过对现有功能的影响
+  
+  - type: textarea
+    id: references
+    attributes:
+      label: 📚 参考资料
+      description: 相关的文档、项目或技术资料
+      placeholder: |
+        - 类似功能的参考项目或文档链接
+        - 相关的技术规范或标准
+        - 有用的教程或实现示例
+  
+  - type: textarea
+    id: mockups
+    attributes:
+      label: 🎨 设计草图
+      description: 如果适用，请提供界面设计或流程图
+      placeholder: |
+        - 界面设计图或线框图
+        - 流程图或架构图
+        - 配置文件示例
+        - 其他可视化说明
+  
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: 📝 补充说明
+      description: 其他想要补充的信息
+      placeholder: |
+        - 实现的时间预期
+        - 需要的技术支持
+        - 可能的风险或注意事项
+        - 其他相关的想法或建议

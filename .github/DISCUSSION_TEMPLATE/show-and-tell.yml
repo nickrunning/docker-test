@@ -1,0 +1,181 @@
+labels: [show-and-tell, showcase]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您愿意分享您的成果和经验！这对整个社区都很有价值。
+        
+        > 🌟 **提示**: 好的分享包括演示效果、实现方法和经验总结
+  
+  - type: textarea
+    id: project-overview
+    attributes:
+      label: 🎯 项目概述
+      description: 简要介绍您想要分享的内容
+      placeholder: |
+        请简要说明：
+        - 您实现了什么？
+        - 解决了什么问题？
+        - 有什么特别之处？
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: share-type
+    attributes:
+      label: 📂 分享类型
+      description: 您要分享的内容类型
+      options:
+        - 自定义配置和设置
+        - 创新功能或应用
+        - 部署和运维经验
+        - 性能优化方案
+        - 问题解决方案
+        - 集成和扩展
+        - 使用技巧和窍门
+        - 自动化脚本
+        - 其他创新应用
+    validations:
+      required: true
+  
+  - type: textarea
+    id: demo
+    attributes:
+      label: 🎬 演示效果
+      description: 展示您的成果（截图、GIF、视频链接等）
+      placeholder: |
+        请提供：
+        - 效果截图或GIF动画
+        - 视频演示链接
+        - 使用前后的对比
+        - 界面或功能展示
+  
+  - type: textarea
+    id: implementation
+    attributes:
+      label: 🛠️ 实现方法
+      description: 详细说明实现过程和技术细节
+      placeholder: |
+        请说明：
+        - 使用了哪些技术或工具
+        - 主要的实现步骤
+        - 关键的配置或代码
+        - 技术架构或设计思路
+    validations:
+      required: true
+  
+  - type: textarea
+    id: code-config
+    attributes:
+      label: 💻 代码和配置
+      description: 分享关键的代码片段或配置文件
+      placeholder: |
+        请分享：
+        - Docker Compose配置
+        - 自定义脚本
+        - 配置文件修改
+        - 环境变量设置
+      render: yaml
+  
+  - type: textarea
+    id: technical-stack
+    attributes:
+      label: 🔧 技术栈
+      description: 列出使用的技术、工具和依赖
+      placeholder: |
+        例如：
+        - Docker & Docker Compose
+        - 反向代理（Nginx/Traefik）
+        - 监控工具（Prometheus/Grafana）
+        - 自动化脚本（Bash/Python）
+        - 其他集成服务
+    validations:
+      required: true
+  
+  - type: textarea
+    id: challenges
+    attributes:
+      label: 🎯 遇到的挑战
+      description: 实现过程中遇到的问题和解决方案
+      placeholder: |
+        请分享：
+        - 遇到了哪些技术难题？
+        - 如何解决这些问题？
+        - 有哪些踩坑经验？
+        - 有什么特别的技巧？
+    validations:
+      required: true
+  
+  - type: textarea
+    id: lessons-learned
+    attributes:
+      label: 📚 经验总结
+      description: 总结有价值的经验和建议
+      placeholder: |
+        请总结：
+        - 最重要的经验教训
+        - 给其他用户的建议
+        - 可以避免的错误
+        - 最佳实践推荐
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: 📈 实现难度
+      description: 您认为这个实现的难度如何？
+      options:
+        - 初级 - 新手友好，容易上手
+        - 中级 - 需要一些技术基础
+        - 高级 - 需要丰富的经验和技能
+        - 专家级 - 需要深入的专业知识
+    validations:
+      required: true
+  
+  - type: textarea
+    id: setup-guide
+    attributes:
+      label: 📋 设置指南
+      description: 为想要复现的用户提供详细步骤
+      placeholder: |
+        请提供：
+        1. 前提条件和环境要求
+        2. 详细的安装和配置步骤
+        3. 验证和测试方法
+        4. 常见问题和解决方案
+  
+  - type: textarea
+    id: resources
+    attributes:
+      label: 🔗 相关资源
+      description: 有用的文档、工具或参考资料
+      placeholder: |
+        - 官方文档链接
+        - 相关工具和库
+        - 参考教程或文章
+        - 开源项目或代码仓库
+  
+  - type: checkboxes
+    id: sharing-options
+    attributes:
+      label: 🤝 分享选项
+      description: 您的分享意图和合作意愿
+      options:
+        - label: 希望得到社区反馈和建议
+        - label: 愿意回答相关问题和提供帮助
+        - label: 欢迎其他人基于此进行改进
+        - label: 希望将此集成到项目文档中
+        - label: 寻求合作伙伴或贡献者
+        - label: 开源分享，供大家自由使用
+  
+  - type: textarea
+    id: future-plans
+    attributes:
+      label: 🚀 未来计划
+      description: 后续的改进或扩展计划
+      placeholder: |
+        - 计划添加哪些功能？
+        - 有什么改进想法？
+        - 需要社区的哪些支持？
+        - 是否考虑开源或贡献回项目？
