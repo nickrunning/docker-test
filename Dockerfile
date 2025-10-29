@@ -1,5 +1,6 @@
 # WeChat for Linux using Selkies baseimage
-FROM ghcr.io/linuxserver/baseimage-selkies:ubuntunoble
+# FROM ghcr.io/linuxserver/baseimage-selkies:ubuntunoble
+FROM ghcr.io/linuxcontainers/alpine:latest
 
 # Metadata labels
 LABEL org.opencontainers.image.title="WeChat Selkies"
@@ -15,41 +16,41 @@ ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 RUN echo "🏗️ Building WeChat-Selkies on $BUILDPLATFORM, targeting $TARGETPLATFORM"
 
-# set environment variables
-RUN apt-get update && \
-    apt-get install -y fonts-noto-cjk libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
-    libxcb-render-util0 libxcb-xkb1 libxkbcommon-x11-0 \
-    shared-mime-info desktop-file-utils libxcb1 libxcb-icccm4 libxcb-image0 \
-    libxcb-keysyms1 libxcb-randr0 libxcb-render0 libxcb-render-util0 libxcb-shape0 \
-    libxcb-shm0 libxcb-sync1 libxcb-util1 libxcb-xfixes0 libxcb-xkb1 libxcb-xinerama0 \
-    libxcb-xkb1 libxcb-glx0 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 \
-    libdbus-1-3 libfontconfig1 libgbm1 libgcc1 libgdk-pixbuf2.0-0 libglib2.0-0 \
-    libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 \
-    libxcomposite1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
-    libxss1 libxtst6 libatomic1 libxcomposite1 libxrender1 libxrandr2 libxkbcommon-x11-0 \
-    libfontconfig1 libdbus-1-3 libnss3 libx11-xcb1 python3-tk stalonetray
+# # set environment variables
+# RUN apt-get update && \
+#     apt-get install -y fonts-noto-cjk libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+#     libxcb-render-util0 libxcb-xkb1 libxkbcommon-x11-0 \
+#     shared-mime-info desktop-file-utils libxcb1 libxcb-icccm4 libxcb-image0 \
+#     libxcb-keysyms1 libxcb-randr0 libxcb-render0 libxcb-render-util0 libxcb-shape0 \
+#     libxcb-shm0 libxcb-sync1 libxcb-util1 libxcb-xfixes0 libxcb-xkb1 libxcb-xinerama0 \
+#     libxcb-xkb1 libxcb-glx0 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 \
+#     libdbus-1-3 libfontconfig1 libgbm1 libgcc1 libgdk-pixbuf2.0-0 libglib2.0-0 \
+#     libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 \
+#     libxcomposite1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
+#     libxss1 libxtst6 libatomic1 libxcomposite1 libxrender1 libxrandr2 libxkbcommon-x11-0 \
+#     libfontconfig1 libdbus-1-3 libnss3 libx11-xcb1 python3-tk
 
-RUN pip install --no-cache-dir python-xlib
+# RUN pip install --no-cache-dir python-xlib
 
-# Install WeChat based on target architecture
-RUN case "$TARGETPLATFORM" in \
-    "linux/amd64") \
-        WECHAT_URL="https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.deb"; \
-        WECHAT_ARCH="x86_64" ;; \
-    "linux/arm64") \
-        WECHAT_URL="https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.deb"; \
-        WECHAT_ARCH="arm64" ;; \
-    *) \
-        echo "❌ Unsupported platform: $TARGETPLATFORM" >&2; \
-        echo "Supported platforms: linux/amd64, linux/arm64" >&2; \
-        exit 1 ;; \
-    esac && \
-    echo "📦 Downloading WeChat for $WECHAT_ARCH architecture..." && \
-    curl -fsSL -o wechat.deb "$WECHAT_URL" && \
-    echo "🔧 Installing WeChat..." && \
-    (dpkg -i wechat.deb || (apt-get update && apt-get install -f -y && dpkg -i wechat.deb)) && \
-    rm -f wechat.deb && \
-    echo "✅ WeChat installation completed for $WECHAT_ARCH"
+# # Install WeChat based on target architecture
+# RUN case "$TARGETPLATFORM" in \
+#     "linux/amd64") \
+#         WECHAT_URL="https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.deb"; \
+#         WECHAT_ARCH="x86_64" ;; \
+#     "linux/arm64") \
+#         WECHAT_URL="https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.deb"; \
+#         WECHAT_ARCH="arm64" ;; \
+#     *) \
+#         echo "❌ Unsupported platform: $TARGETPLATFORM" >&2; \
+#         echo "Supported platforms: linux/amd64, linux/arm64" >&2; \
+#         exit 1 ;; \
+#     esac && \
+#     echo "📦 Downloading WeChat for $WECHAT_ARCH architecture..." && \
+#     curl -fsSL -o wechat.deb "$WECHAT_URL" && \
+#     echo "🔧 Installing WeChat..." && \
+#     (dpkg -i wechat.deb || (apt-get update && apt-get install -f -y && dpkg -i wechat.deb)) && \
+#     rm -f wechat.deb && \
+#     echo "✅ WeChat installation completed for $WECHAT_ARCH"
 
 # Install QQ based on target architecture
 RUN case "$TARGETPLATFORM" in \
@@ -94,5 +95,5 @@ ENV AUTO_START_QQ="false"
 # update favicon
 RUN cp /usr/share/icons/hicolor/128x128/apps/wechat.png /usr/share/selkies/www/icon.png
 
-# add local files
-COPY /root /
+# # add local files
+# COPY /root /
